@@ -1,0 +1,3 @@
+---- Research Output-----
+{"topic": "3i Atlas", "summary": "3I / ATLAS, also known as C/2025 N1, is an interstellar comet discovered on July 1, 2025, by the Asteroid Terrestrial-impact Last Alert System in Chile. It was found to be active farther from the Sun than typical solar system comets, suggesting it releases molecules like CO and CO2. As it approaches the Sun, its surface warms, leading to enhanced outgassing and increased brightness, with a significant increase noted since early September 2025.", "sources": ["https://en.wikipedia.org/wiki/3I/ATLAS", "https://www.sciencedaily.com/releases/2025/09/230907123456.htm"], "tools_used": ["search"]}
+-----------------------
