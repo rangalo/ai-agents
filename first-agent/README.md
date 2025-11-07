@@ -33,10 +33,8 @@ This project is a research assistant agent built with LangChain and OpenAI. It c
     The project uses `uv` for package management. If you don't have `uv` installed, you can install it with `pip`: `pip install uv`.
 
     ```bash
-    uv pip install -r requirements.txt
+    uv sync
     ```
-    
-    *Note: A `requirements.txt` file is not provided. You can install dependencies directly from `pyproject.toml` if you are using a compatible package manager or generate a `requirements.txt` file.*
 
 3.  **Set up the environment variables:**
 
@@ -51,7 +49,7 @@ This project is a research assistant agent built with LangChain and OpenAI. It c
 To run the research assistant agent, execute the `main.py` script:
 
 ```bash
-python main.py
+uv run python main.py
 ```
 
 The script will prompt you to enter your research query. The agent will then process the query, use the available tools to gather information, and print the research output to the console.
