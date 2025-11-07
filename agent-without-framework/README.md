@@ -27,7 +27,7 @@ This project is a conversational AI agent that can read, list, and edit files on
    ```
 2. Install the dependencies:
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 3. Create a `.env` file in the root directory and add your OpenAI API key:
    ```
@@ -57,7 +57,7 @@ The project is structured as follows:
     - `05_chat_method.py`: Implements the `chat` method for the agent.
     - `06_interactive_chat.py`: Implements the interactive chat mode.
     - `07_adding_personality.py`: Adds a personality to the agent.
-- `requirements.txt`: A file containing the project's dependencies.
+- `pyproject.toml`: A file containing the project's dependencies.
 - `README.md`: This file.
 
 ## How It Works
