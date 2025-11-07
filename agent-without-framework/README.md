@@ -39,7 +39,7 @@ This project is a conversational AI agent that can read, list, and edit files on
 To run the agent in interactive chat mode, run the following command:
 
 ```bash
-python main.py
+uv run python main.py
 ```
 
 You can then start a conversation with the agent in the terminal. To exit the chat, type `exit` or `quit`.
