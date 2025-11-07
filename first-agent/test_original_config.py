@@ -6,18 +6,19 @@ import time
 
 load_dotenv()
 
+
 def test_exact_original_config():
     print("=== Testing EXACT Original Configuration ===\n")
-    
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    
+
     # Test the exact same configuration that was causing problems
     print("Testing with EXACT original tools configuration...")
     print(f"search_tool: {search_tool}")
     print(f"wiki_tool: {wiki_tool}")
     print(f"wiki_tool.name: {wiki_tool.name}")
     print(f"wiki_tool.description: {wiki_tool.description}")
-    
+
     try:
         agent = create_agent(
             model=llm,
@@ -32,38 +33,35 @@ def test_exact_original_config():
             
             When providing sources, use REAL URLs from your search results, not example URLs.
             After using tools, provide ONLY the final JSON response with no additional text.""",
-            tools=[search_tool, wiki_tool]  # EXACT same as original
+            tools=[search_tool, wiki_tool],  # EXACT same as original
         )
-        
+
         print("\n✅ Agent created successfully")
-        
+
         # Test with the same query that was causing issues
         query = "What is the population of Tokyo?"
         print(f"\nTesting query: '{query}'")
-        
+
         start_time = time.time()
-        response = agent.invoke({
-            "messages": [{"role": "user", "content": query}]
-        })
+        response = agent.invoke({"messages": [{"role": "user", "content": query}]})
         end_time = time.time()
-        
+
         # Analyze response
         tool_calls = []
         for message in response["messages"]:
-            if hasattr(message, 'tool_calls') and message.tool_calls:
+            if hasattr(message, "tool_calls") and message.tool_calls:
                 for tool_call in message.tool_calls:
-                    tool_calls.append({
-                        'name': tool_call['name'],
-                        'args': tool_call['args']
-                    })
-        
+                    tool_calls.append(
+                        {"name": tool_call["name"], "args": tool_call["args"]}
+                    )
+
         print(f"✅ SUCCESS in {end_time - start_time:.2f} seconds")
         print(f"Tool calls made: {len(tool_calls)}")
         for call in tool_calls:
             print(f"  - {call['name']}: {call['args']}")
-        
+
         print(f"\nFinal response preview: {response['messages'][-1].content[:100]}...")
-        
+
         # The configuration works! So what was the actual issue?
         print("\n🤔 CONCLUSION: The wiki tool itself is NOT the problem!")
         print("The issue must have been one of:")
@@ -71,11 +69,13 @@ def test_exact_original_config():
         print("2. Parsing errors with structured output")
         print("3. Network timeouts during development")
         print("4. Environmental/dependency issues")
-        
+
     except Exception as e:
         print(f"❌ ERROR: {e}")
         import traceback
+
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     test_exact_original_config()

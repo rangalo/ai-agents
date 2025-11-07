@@ -7,6 +7,7 @@ from tools import search_tool, wiki_tool, save_tool
 
 load_dotenv()
 
+
 class ResearchResponse(BaseModel):
     topic: str
     summary: str
@@ -14,15 +15,15 @@ class ResearchResponse(BaseModel):
     tools_used: list[str]
 
 
-def main():    
+def main():
     try:
         llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-        
+
         # Create parser for structured output
         parser = PydanticOutputParser(pydantic_object=ResearchResponse)
-        
+
         # Create tool calling agent with search tool only (wiki_tool causing issues)
-        tools = [search_tool, wiki_tool, save_tool] 
+        tools = [search_tool, wiki_tool, save_tool]
 
         agent = create_agent(
             model=llm,
@@ -42,19 +43,17 @@ def main():
             IMPORTANT: 
             - Use real URLs from search results for sources
             - Provide only the JSON response after using tools""",
-            tools=tools
+            tools=tools,
         )
 
         # Enable dynamic input - tools should work now
         query = input("Enter your research query: ")
-        
+
         print(f"\n🔍 Processing query: '{query}'")
         print("📡 Invoking agent with tools...")
 
-        response = agent.invoke({
-            "messages": [{"role": "user", "content": query}]
-        })
-        
+        response = agent.invoke({"messages": [{"role": "user", "content": query}]})
+
     except KeyboardInterrupt:
         print("\n❌ Operation cancelled by user")
         return
@@ -66,35 +65,35 @@ def main():
     print("=== Tool Usage Summary ===")
     tool_calls = []
     for message in response["messages"]:
-        if hasattr(message, 'tool_calls') and message.tool_calls:
-            for tool_call in message.tool_calls:                                
+        if hasattr(message, "tool_calls") and message.tool_calls:
+            for tool_call in message.tool_calls:
                 tool_calls.append(tool_call)
-    
+
     if tool_calls:
         print("Tools used by agent:")
         for call in tool_calls:
             print(f"  {call}")
     else:
         print("❌ No tools were used!")
-    
+
     print(f"\n=== Agent Made {len(tool_calls)} Tool Call(s) ===")
-    
+
     # Extract and parse the structured response
     last_message = response["messages"][-1]
-    
+
     try:
         # Parse the structured response using PydanticOutputParser
         structured_output = parser.parse(last_message.content)
-        
+
         print("=== Successfully Parsed Structured Response ===")
         print(f"Topic: {structured_output.topic}")
         print(f"Summary: {structured_output.summary}")
         print(f"Sources: {structured_output.sources}")
         print(f"Tools used: {structured_output.tools_used}")
-        
-        print("\n✅ Tool calling agent with empty tools list worked successfully!")
-        print("✅ PydanticOutputParser successfully parsed the structured response!")
-        
+
+        print("\nTool calling agent with empty tools list worked successfully!")
+        print("PydanticOutputParser successfully parsed the structured response!")
+
     except Exception as e:
         print(f"❌ Parsing error: {e}")
         print("Raw agent response:", last_message.content)

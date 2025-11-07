@@ -10,11 +10,12 @@ search_tool = Tool(
     description="""Search the web for current, accurate information about any topic. 
     Use this tool to find facts, statistics, recent news, and reliable sources.
     Input should be a clear search query about the topic you need information on.
-    Returns relevant web search results with factual content."""
+    Returns relevant web search results with factual content.""",
 )
 
 api_wrapper = WikipediaAPIWrapper(top_k_results=1, max_summary_chars=100)
 wiki_tool = WikipediaQueryRun(api_wrapper=api_wrapper)
+
 
 def save_to_file(data: str, filename: str = "research_output.txt"):
     """Saves the given data to a text file with a timestamp."""
@@ -25,8 +26,9 @@ def save_to_file(data: str, filename: str = "research_output.txt"):
         file.write(formatted_text)
     return f"Successfully saved to {full_filename}"
 
+
 save_tool = Tool(
     name="save_to_file",
     func=save_to_file,
-    description="Saves the provided research data to a timestamped text file. Input should be the research output text."
+    description="Saves the provided research data to a timestamped text file. Input should be the research output text.",
 )

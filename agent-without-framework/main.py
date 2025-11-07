@@ -231,7 +231,9 @@ class AIAgent:
                     continue
                 else:
                     # No tool calls, return the assistant's response
-                    logging.info(f"Final assistant response: {assistant_message.content}")
+                    logging.info(
+                        f"Final assistant response: {assistant_message.content}"
+                    )
                     return (
                         assistant_message.content
                         or "I apologize, but I couldn't generate a response."
@@ -243,7 +245,7 @@ class AIAgent:
         return "Maximum iterations reached. The conversation may be too complex."
 
 
-if __name__ == "__main__":
+def main():
     print("Starting AI Agent...")
     api_key = os.getenv("OPENAI_API_KEY")
     print(f"API key found: {'Yes' if api_key else 'No'}")
@@ -277,3 +279,7 @@ if __name__ == "__main__":
 
         print(response)
         print()
+
+
+if __name__ == "__main__":
+    main()
