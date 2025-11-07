@@ -1,12 +1,20 @@
 import os
 import sys
 import json
+import logging
 from dotenv import load_dotenv
 from typing import List, Dict, Any
 from pydantic import BaseModel
 from openai import OpenAI
 
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    handlers=[logging.FileHandler("agent.log")],
+)
 
 
 class Tool(BaseModel):
@@ -21,7 +29,7 @@ class AIAgent:
         self.messages: List[Dict[str, str]] = []
         self.tools: Dict[str, Tool] = {}
         self._setup_tools()
-        print("AI Agent initialized ")
+        logging.info("AI Agent initialized ")
 
     def _setup_tools(self):
         self.tools = {
@@ -198,10 +206,11 @@ class AIAgent:
                         "tool_calls": assistant_message.tool_calls,
                     }
                 )
-                # print(f"Assistant message: {assistant_message}")
+                logging.info(f"Assistant message: {assistant_message}")
                 # Check if the assistant wants to call tools
                 if assistant_message.tool_calls:
                     # Execute each tool call
+                    logging.info(f"Tool calls detected: {assistant_message.tool_calls}")
                     for tool_call in assistant_message.tool_calls:
                         tool_name = tool_call.function.name
                         tool_args = json.loads(tool_call.function.arguments)
@@ -222,6 +231,7 @@ class AIAgent:
                     continue
                 else:
                     # No tool calls, return the assistant's response
+                    logging.info(f"Final assistant response: {assistant_message.content}")
                     return (
                         assistant_message.content
                         or "I apologize, but I couldn't generate a response."
